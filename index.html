@@ -5,13 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div>
         <label for="ammount">Expense Ammount</label>
         <input name="ammount" type="number" id="ammount" class="input"><br>
-        <label for="description">Description</label>
-        <input name="description" type="text" id="description" class="input"><br>
         <label for="catagory">Choose Catagory</label>
         <select name="catagory" id="selectCat">
             <option value="movies">Movies</option>
@@ -20,6 +19,8 @@
             <option value="cloths">Cloths</option>
             <option value="other">Other</option>
         </select><br>
+        <label for="description">Description</label>
+        <input name="description" type="text" id="description" class="input"><br>
         <button id="addexpbtn">Add Expense</button>
     </div>
     <div id="display">
