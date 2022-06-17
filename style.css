@@ -1,0 +1,15 @@
+*{
+    font-size: medium;
+}
+
+button {
+    width: auto;
+}
+
+input {
+    width: 10%;
+}
+#description {
+    width: 20%;
+}
+
