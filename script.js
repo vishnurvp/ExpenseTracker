@@ -7,16 +7,21 @@ const dispDiv = document.getElementById('display');
 const itemList = document.getElementById('list');
 
 
-let crudURL = 'https://crudcrud.com/api/a45e37be7bc34c0dba17dfb85a666ff5/expenceTracker';
-axios.get(crudURL)
-.then((response)=>{
-    let expences=response.data;
-    if (expences.length===0) return; // if no data, do nothing
-    for (let expence of expences) {dispUser(expence);}
-})
-.catch(err=>console.log(err));
+let crudURL = 'https://crudcrud.com/api/0daecd20348643d0a4bd50b3b49abf54/expenceTracker';
+async function getdata() {
+    try {
+        let response = await axios.get(crudURL);
+        let expences=response.data;
+        if (expences.length===0) return; // if no data, do nothing
+        for (let expence of expences) {dispUser(expence);}
+    } catch (error) {
+        console.log(error);
+    }
+}
+getdata();
 
-function dispUser(expence) {
+
+async function dispUser(expence) {
     let li = document.createElement('li');
     li.id = expence._id;
     li.ammount = expence.ammount;
@@ -45,32 +50,35 @@ addExpBtn.addEventListener('click', () => {
     expence.ammount = ammountInput.value;
     expence.description = descriptionInput.value;
     expence.catagory = catagoryInput.value;
-    axios.post(crudURL,expence)
-    .then((response)=>{
-        dispUser(response.data);
-    })
-    .catch(err=>console.log(err));
-
+    async function postData() {
+        try {
+            let response = await axios.post(crudURL,expence)
+            dispUser(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    postData();
     ammountInput.value = '';
     descriptionInput.value = '';
 });
 
 
 itemList.addEventListener('click', EditDelete);
-function EditDelete(e){
+async function EditDelete(e){
     if (e.target.classList.contains('delete')) {
         let li = e.target.parentElement;
         itemList.removeChild(li);
         // console.log(data);
         let url = `${crudURL}/${li.id}`;
-        // delete user data in crudcrud
-        axios.delete(url).catch(err=>console.log(err));
+        // delete user data in crudcrud      
+        try { let res = await axios.delete(url); } catch (error) { console.log(error);}
     }
     if (e.target.classList.contains('edit')) {
         let li = e.target.parentElement;
         itemList.removeChild(li);
         let url = `${crudURL}/${li.id}`;
-        axios.delete(url).catch(err=>console.log(err));
+        try { let res = await axios.delete(url); } catch (error) { console.log(error);}
         ammountInput.value = li.ammount;
         descriptionInput.value = li.description;
         catagoryInput.value = li.catagory;
