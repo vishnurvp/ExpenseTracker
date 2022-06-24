@@ -42,7 +42,10 @@ async function dispUser(expence) {
     itemList.appendChild(li);
 }
 
-addExpBtn.addEventListener('click', () => {
+let editing = false;
+let editID;
+
+addExpBtn.addEventListener('click', async () => {
     let expence = {};
     if (ammountInput.value === '') {
         return;
@@ -50,7 +53,19 @@ addExpBtn.addEventListener('click', () => {
     expence.ammount = ammountInput.value;
     expence.description = descriptionInput.value;
     expence.catagory = catagoryInput.value;
-    async function postData() {
+
+    if (editing) {
+        let url = `${crudURL}/${editID}`;
+        try { 
+            let res = await axios.put(url, expence); 
+            // dispUser(res.data);
+            // itemList.innerHTML = '';
+            // getdata();
+            expence._id = editID;
+            dispUser(expence);
+            addExpBtn.innerHTML = 'Add Expence';
+        } catch (error) { console.log(error);}
+    } else {
         try {
             let response = await axios.post(crudURL,expence)
             dispUser(response.data);
@@ -58,7 +73,6 @@ addExpBtn.addEventListener('click', () => {
             console.log(error);
         }
     }
-    postData();
     ammountInput.value = '';
     descriptionInput.value = '';
 });
@@ -78,7 +92,10 @@ async function EditDelete(e){
         let li = e.target.parentElement;
         itemList.removeChild(li);
         let url = `${crudURL}/${li.id}`;
-        try { let res = await axios.delete(url); } catch (error) { console.log(error);}
+        editing = true;
+        editID = li.id;
+        addExpBtn.innerHTML = 'Edit and Submit';
+        // try { let res = await axios.delete(url); } catch (error) { console.log(error);}
         ammountInput.value = li.ammount;
         descriptionInput.value = li.description;
         catagoryInput.value = li.catagory;
